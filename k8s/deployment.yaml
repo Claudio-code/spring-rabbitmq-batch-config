@@ -1,0 +1,43 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rabbit-spring
+  name: rabbit-spring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbit-spring
+  template:
+    metadata:
+      labels:
+        app: rabbit-spring
+    spec:
+      containers:
+        - image: claudio2424/rabbit-spring
+          name: rabbit-spring
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+___
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: rabbit-spring
+  name: rabbit-spring
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - port: 8080
+    nodePort: 32244
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: rabbit-spring
+  type: NodePort`
